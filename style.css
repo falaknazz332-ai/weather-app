@@ -1,0 +1,382 @@
+/* ============================================
+   Sky Diary — Design Tokens
+   ============================================ */
+:root{
+  --cream:        #FFF8F0;
+  --ink:           #3A3A4A;
+  --ink-soft:      #6E6E85;
+  --coral:         #FF8FA3;
+  --coral-deep:    #F76C87;
+  --sky:           #8EC6FF;
+  --sun:           #FFD166;
+  --mint:          #8FD9A8;
+  --card-bg:       #FFFFFF;
+  --card-shadow:   0 24px 60px -20px rgba(58, 58, 74, 0.25);
+  --radius-lg:     32px;
+  --radius-md:     20px;
+  --radius-sm:     14px;
+
+  /* default (idle) scene colors — overwritten per weather state */
+  --scene-top:     #DCEBFF;
+  --scene-bottom:  #FFF3E0;
+  --scene-accent:  #8EC6FF;
+
+  --font-display:  'Fredoka', system-ui, sans-serif;
+  --font-body:     'Nunito', system-ui, sans-serif;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  font-family: var(--font-body);
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 64px;
+}
+
+.app{
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ============================================
+   Topbar
+   ============================================ */
+.topbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark{ font-size: 26px; }
+
+.brand-name{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.unit-toggle{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--card-bg);
+  color: var(--ink);
+  border: 2px solid rgba(58,58,74,0.1);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.unit-toggle:hover{ border-color: var(--coral); }
+.unit-toggle:active{ transform: scale(0.94); }
+
+/* ============================================
+   Search
+   ============================================ */
+.search-row{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.search-field{
+  position: relative;
+  flex: 1;
+}
+
+#cityInput{
+  width: 100%;
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--card-bg);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 20px -8px rgba(58,58,74,0.18);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+#cityInput::placeholder{ color: var(--ink-soft); font-weight: 600; }
+#cityInput:focus{ border-color: var(--sky); }
+
+.suggestions{
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow);
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.suggestions li{
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.suggestions li:hover,
+.suggestions li:focus,
+.suggestions li.active{
+  background: #FFF1E8;
+}
+.suggestions li small{
+  display: block;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.search-btn{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--coral), var(--coral-deep));
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0 22px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -10px rgba(247,108,135,0.7);
+  transition: transform 0.15s ease;
+}
+.search-btn:hover{ transform: translateY(-2px); }
+.search-btn:active{ transform: translateY(0) scale(0.97); }
+
+.locate-btn{
+  display: block;
+  margin: 0 0 20px auto;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.locate-btn:hover{ color: var(--ink); text-decoration: underline; }
+
+/* ============================================
+   Weather Card — the signature element
+   ============================================ */
+.card{
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--scene-top), var(--scene-bottom));
+  box-shadow: var(--card-shadow);
+  transition: background 0.8s ease;
+  min-height: 420px;
+}
+
+.scene{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.card-inner{
+  position: relative;
+  z-index: 5;
+  padding: 28px 26px 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+.status{
+  margin: auto;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink-soft);
+  padding: 0 20px;
+}
+
+.result{ margin-top: auto; }
+.result[hidden]{ display: none; }
+
+.place{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.datetime{
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.temp-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.icon{
+  font-size: 54px;
+  line-height: 1;
+  filter: drop-shadow(0 8px 14px rgba(58,58,74,0.18));
+}
+
+.temp{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.condition{
+  margin: 6px 0 0;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.feels-like{
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.stats{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat{
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(6px);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.stat-label{
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.stat-value{
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.footnote{
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+/* ============================================
+   Weather-state palettes
+   Applied via data-state on #weatherCard
+   ============================================ */
+.card[data-state="cold"]{
+  --scene-top: #DCEEFF;
+  --scene-bottom: #F3F8FF;
+}
+.card[data-state="cool"]{
+  --scene-top: #E4EEFF;
+  --scene-bottom: #FBEFE0;
+}
+.card[data-state="mild"]{
+  --scene-top: #CFE8FF;
+  --scene-bottom: #EAF6EC;
+}
+.card[data-state="warm"]{
+  --scene-top: #FFE3B3;
+  --scene-bottom: #FFF3DC;
+}
+.card[data-state="hot"]{
+  --scene-top: #FFC98B;
+  --scene-bottom: #FFE0B0;
+}
+.card[data-state="rain"]{
+  --scene-top: #B7C7DA;
+  --scene-bottom: #E4EAF0;
+}
+.card[data-state="night"]{
+  --scene-top: #2E3555;
+  --scene-bottom: #4C5680;
+}
+.card[data-state="night"] .place,
+.card[data-state="night"] .temp,
+.card[data-state="night"] .condition{
+  color: #FFF8F0;
+}
+.card[data-state="night"] .datetime,
+.card[data-state="night"] .feels-like{
+  color: rgba(255,248,240,0.75);
+}
+.card[data-state="night"] .stat{
+  background: rgba(255,255,255,0.12);
+}
+.card[data-state="night"] .stat-label{
+  color: rgba(255,248,240,0.65);
+}
+.card[data-state="night"] .stat-value{
+  color: #FFF8F0;
+}
+
+/* ============================================
+   Responsive + accessibility
+   ============================================ */
+@media (max-width: 380px){
+  .temp{ font-size: 52px; }
+  .icon{ font-size: 44px; }
+}
+
+:focus-visible{
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}

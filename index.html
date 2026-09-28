@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sky Diary — Weather, Anywhere</title>
+ 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+ 
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <div class="app">
+ 
+    <!-- Header -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">☁️</span>
+        <span class="brand-name">Sky Diary</span>
+      </div>
+      <button class="unit-toggle" id="unitToggle" type="button" aria-label="Switch temperature unit">°C</button>
+    </header>
+ 
+    <!-- Search -->
+    <form class="search-row" id="searchForm" autocomplete="off">
+      <div class="search-field">
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Search any city — Karachi, Tokyo, Lagos…"
+          aria-label="Search city"
+        >
+        <ul class="suggestions" id="suggestions" hidden></ul>
+      </div>
+      <button type="submit" class="search-btn">
+        <span>Look up</span>
+      </button>
+    </form>
+ 
+    <button class="locate-btn" id="locateBtn" type="button">
+      📍 Use my location
+    </button>
+ 
+    <!-- Weather Card -->
+    <main class="card" id="weatherCard" data-state="idle">
+ 
+      <canvas id="scene" class="scene"></canvas>
+ 
+      <div class="card-inner">
+ 
+        <div class="status" id="status">
+          Search a city to see its sky right now.
+        </div>
+ 
+        <div class="result" id="result" hidden>
+          <p class="place" id="place">—</p>
+          <p class="datetime" id="datetime">—</p>
+ 
+          <div class="temp-row">
+            <span class="icon" id="conditionIcon">🌤️</span>
+            <span class="temp" id="temp">--°</span>
+          </div>
+ 
+          <p class="condition" id="condition">—</p>
+          <p class="feels-like" id="feelsLike">Feels like --°</p>
+ 
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-label">Humidity</span>
+              <span class="stat-value" id="humidity">--%</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Wind</span>
+              <span class="stat-value" id="wind">-- km/h</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Mood</span>
+              <span class="stat-value" id="mood">—</span>
+            </div>
+          </div>
+        </div>
+ 
+      </div>
+    </main>
+ 
+    
+ 
+  </div>
+ 
+<script src="script.js"></script>
+</body>
+</html>
+ 
